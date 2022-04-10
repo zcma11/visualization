@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #main {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  </head>
+  <body>
+    <div id="main"></div>
+
+    <script>
+      const main = d3.select('#main')
+      console.log(main)
+      const svg = main.append('svg').attr('width', '100%').attr('height', '100%')
+      const circle = svg.append('circle').attr('r', 40).attr('cx', 400).attr('cy', 400)
+
+      circle.on('mouseover', () => {
+        circle.attr('fill', '#bfa')
+      })
+
+      circle.on('mouseout', () => {
+        circle.attr('fill', '#000')
+      })
+    </script>
+  </body>
+</html>

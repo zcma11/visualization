@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: #faf5ea;
+      }
+      .question {
+        padding: 30px;
+        width: 60%;
+        margin: auto;
+      }
+      .title {
+        font-weight: bold;
+        font-size: 18px;
+      }
+      .opt {
+        display: block;
+        line-height: 36px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  </head>
+  <body>
+    <div class="question">
+      <p class="title">《沁园春·长沙》里的诗句有哪些？</p>
+      <label>
+        <input type="checkbox" checked /> 独立寒秋，湘江北去，橘子洲头。
+      </label>
+      <label><input type="checkbox" checked /> 看万山红遍，层林尽染； </label>
+      <label><input type="checkbox" checked /> 好好学习，天天向上。 </label>
+    </div>
+
+    <script>
+      const input = d3.selectAll('input')
+      input.attr('class', 'opt')
+      input.property('checked', (ele, i) => {
+        console.log(ele, i)
+        return i === 2
+      })
+    </script>
+  </body>
+</html>
