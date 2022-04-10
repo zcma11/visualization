@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .item {
+        cursor: pointer;
+      }
+
+      .item:hover {
+        opacity: 0.9;
+      }
+
+      #tip {
+        position: absolute;
+        margin-left: 10px;
+        margin-top: 30px;
+        line-height: 22px;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 4px 9px;
+        font-size: 13px;
+        color: #fff;
+        border-radius: 3px;
+        pointer-events: none;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+    <script>
+      const categories = ['html', 'js', 'css']
+      const [width, height] = [600, 600]
+      const color = ['#c23531', '#2f4554', '#bfa']
+      const dataSource = [
+        [40, 29, 60],
+        [20, 59, 38]
+      ]
+      const dimensions = ['学习人数', '就业人数']
+
+      const main = d3.select('#main')
+      const svg = main
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .attr('version', '1.2')
+        .attr('xmlns', 'http://www.w3.org/2000/svg')
+
+      const xChartData = d3.range(categories.length)
+      const xPixelRange = [50, width - 50]
+      // 类目轴
+      const xScale = d3
+        .scaleBand()
+        .domain(xChartData)
+        .rangeRound(xPixelRange)
+        .padding(0.1)
+      const xAxisGenterator = d3.axisBottom(xScale)
+
+      svg
+        .append('g')
+        .attr('transform', `translate(0, ${height - 50})`)
+        .call(xAxisGenterator)
+        .selectAll('text')
+        .text((_, i) => categories[i])
+        .style('font-size', '18px')
+
+      const maxY = Math.max(...dataSource.flat())
+      const yChartRange = [0, maxY]
+      const yPixelRange = [height - 50, 50]
+      // 线性轴
+      const yScale = d3.scaleLinear().domain(yChartRange).range(yPixelRange)
+      const yAixsGenerator = d3.axisLeft(yScale)
+
+      svg
+        .append('g')
+        .call(yAixsGenerator)
+        .attr('transform', 'translate(50, 0)')
+        .style('font-size', '16px')
+
+      const xBandW = xScale.bandwidth()
+      const n = dataSource.length
+      const colW = xBandW / n
+      const colorLen = color.length
+
+      const sourceMoreInfo = dataSource.map((seriesData, i) => {
+        const seriesName = dimensions[i]
+        return seriesData.map((data, j) => {
+          const rectName = categories[j]
+          return {
+            rectData: data,
+            rectIndex: j,
+            seriesName,
+            seriesIndex: i,
+            rectName
+          }
+        })
+      })
+
+      const seriesObjs = svg
+        .append('g')
+        .selectAll('g')
+        .data(sourceMoreInfo)
+        .join('g')
+        .attr('transform', (_, i) => `translate(${i * colW}, 0)`)
+        .attr('fill', (_, i) => color[i % colorLen])
+
+      const rects = seriesObjs
+        .selectAll('rect')
+        .data(d => d)
+        .join('rect')
+        .classed('item', true)
+
+      rects
+        .attr('x', ({ rectIndex }) => xScale(rectIndex))
+        .attr('y', ({ rectData }) => yScale(rectData))
+        .attr('width', colW)
+        .attr('height', ({ rectData }) => yScale(0) - yScale(rectData))
+
+      const tip = main.append('div').attr('id', 'tip')
+
+      rects.on(
+        'mouseover',
+        ({ clientX, clientY }, { rectData, rectName, seriesName }) => {
+          tip
+            .style('display', 'block')
+            .style('top', clientY + 'px')
+            .style('left', clientX + 'px').html(`
+            <div>${seriesName}</div>
+            <div>${rectName}: ${rectData}</div>
+          `)
+        }
+      )
+
+      rects.on('mousemove', ({ clientX, clientY }) => {
+        tip.style('top', clientY + 'px').style('left', clientX + 'px')
+      })
+
+      rects.on('mouseout', () => {
+        tip.style('display', 'none')
+      })
+    </script>
+  </body>
+</html>
