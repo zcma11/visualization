@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script>
+      const arr = [2, 3, 5, 7, 1, 3, 6, 8]
+      console.log(d3.min(arr))
+      console.log(d3.max(arr))
+      console.log(d3.extent(arr))
+      console.log(d3.sum(arr))
+      console.log(d3.mean(arr))
+
+      d3.json('./lib/data.json').then(res => {
+        console.log(res)
+      })
+
+      d3.svg('./lib/flower.svg').then(dom => {
+        console.log(dom)
+        const svg = dom.querySelector('svg')
+        document.body.appendChild(svg)
+      })
+
+      const width = window.innerWidth
+      const height = window.innerHeight
+
+      const randomW = d3.randomInt(width)
+      const randomH = d3.randomInt(height)
+      const randomS = d3.randomInt(18)
+      const color = d3.randomInt(0, 255)
+      const data = []
+      for (let i = 0; i < 100; i++) {
+        data.push({
+          x: randomW(),
+          y: randomH(),
+          r: randomS(),
+          f: `rgb(${color()}, ${color()}, ${color()})`
+        })
+      }
+
+      const svg = d3
+        .select('#main')
+        .style('width', '100vw')
+        .style('height', '100vh')
+        .append('svg')
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr('version', '1.2')
+        .attr('xmlns', 'http://www.w3.org/2000/svg')
+
+      svg
+        .selectAll('circle')
+        .data(data)
+        .join('circle')
+        .attr('cx', ({ x }) => x)
+        .attr('cy', ({ y }) => y)
+        .attr('r', ({ r }) => r)
+        .attr('fill', ({ f }) => f)
+    </script>
+  </body>
+</html>

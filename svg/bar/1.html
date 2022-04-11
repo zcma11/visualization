@@ -116,13 +116,57 @@
         .join('rect')
         .classed('item', true)
 
+      rects.attr('x', ({ rectIndex }) => xScale(rectIndex)).attr('width', colW)
+
+      rects.attr('y', () => yScale(0)).attr('height', () => 0)
       rects
-        .attr('x', ({ rectIndex }) => xScale(rectIndex))
+        .transition()
+        .duration(1000)
+        .delay(({ rectIndex, seriesIndex }) => (rectIndex + seriesIndex) * 300)
+        .ease(d3.easeBounce)
         .attr('y', ({ rectData }) => yScale(rectData))
-        .attr('width', colW)
         .attr('height', ({ rectData }) => yScale(0) - yScale(rectData))
 
+      class easeObj {
+        constructor(target) {
+          this.target = target
+          this.fm = 0
+          this.pos = { x: 0, y: 0 }
+          this.endPos = { x: 0, y: 0 }
+          this.ratio = 0.1
+          this._play = false
+        }
+
+        get play() {
+          return this._play
+        }
+
+        set play(val) {
+          if (val !== this._play) {
+            if (val) {
+              this.render()
+            } else {
+              this.cancel()
+            }
+            this._play = val
+          }
+        }
+
+        render() {
+          const { endPos, pos, ratio, target } = this
+          pos.x += (endPos.x - pos.x) * ratio
+          pos.y += (endPos.y - pos.y) * ratio
+          target.style('top', pos.y + 'px').style('left', pos.x + 'px')
+          this.fm = requestAnimationFrame(this.render.bind(this))
+        }
+
+        cancel() {
+          cancelAnimationFrame(this.fm)
+        }
+      }
+
       const tip = main.append('div').attr('id', 'tip')
+      const easeInstance = new easeObj(tip)
 
       rects.on(
         'mouseover',
@@ -138,10 +182,12 @@
       )
 
       rects.on('mousemove', ({ clientX, clientY }) => {
-        tip.style('top', clientY + 'px').style('left', clientX + 'px')
+        easeInstance.endPos = { x: clientX, y: clientY }
+        easeInstance.play = true
       })
 
       rects.on('mouseout', () => {
+        easeInstance.play = false
         tip.style('display', 'none')
       })
     </script>
