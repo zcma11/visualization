@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script>
+      const float = d3.format('.3f')
+      console.log(float(0.3))
+      const date = d3.timeFormat('%Y-%m')
+      console.log(date(new Date()))
+
+      const svg = d3
+        .select('#main')
+        .append('svg')
+        .attr('width', '100vw')
+        .attr('height', '100vh')
+      const points = [
+        [300, 200],
+        [100, 400],
+        [500, 400]
+      ]
+      svg
+        .append('polygon')
+        .attr('points', points)
+        .attr('fill', '#bfa')
+        .attr('stroke', '#000')
+        .attr('stroke-width', 2)
+
+      console.log(d3.polygonArea(points))
+      console.log(d3.polygonCentroid(points))
+      console.log(d3.polygonLength(points))
+      const point = [300, 220]
+      svg
+        .append('circle')
+        .attr('cx', point[0])
+        .attr('cy', point[1])
+        .attr('r', 5)
+      console.log(d3.polygonContains(points, point))
+    </script>
+  </body>
+</html>

@@ -118,14 +118,34 @@
 
       rects.attr('x', ({ rectIndex }) => xScale(rectIndex)).attr('width', colW)
 
-      rects.attr('y', () => yScale(0)).attr('height', () => 0)
+      // rects.attr('y', () => yScale(0)).attr('height', () => 0)
+      // rects
+      //   .transition()
+      //   .duration(1000)
+      //   .delay(({ rectIndex, seriesIndex }) => (rectIndex + seriesIndex) * 300)
+      //   .ease(d3.easeBounce)
+      //   .attr('y', ({ rectData }) => yScale(rectData))
+      //   .attr('height', ({ rectData }) => yScale(0) - yScale(rectData))
+
+      const MScale = (data, pixel) => {
+        const [ax, bx] = data
+        const [ay, by] = pixel
+        const k = (by - ay) / (bx - ax)
+        const b = ay - ax * k
+        console.log(k,b)
+        return x => k * x + b
+      }
+      const mScale = MScale(yChartRange, yPixelRange)
+      console.log(mScale(1), yScale(1))
+
+      rects.attr('y', () => mScale(0)).attr('height', () => 0)
       rects
         .transition()
         .duration(1000)
         .delay(({ rectIndex, seriesIndex }) => (rectIndex + seriesIndex) * 300)
         .ease(d3.easeBounce)
-        .attr('y', ({ rectData }) => yScale(rectData))
-        .attr('height', ({ rectData }) => yScale(0) - yScale(rectData))
+        .attr('y', ({ rectData }) => mScale(rectData))
+        .attr('height', ({ rectData }) => mScale(0) - mScale(rectData))
 
       class easeObj {
         constructor(target) {
