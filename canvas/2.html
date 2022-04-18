@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+      }
+      canvas {
+        background: wheat;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const canvas = document.createElement('canvas')
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+      document.body.appendChild(canvas)
+
+      const ctx = canvas.getContext('2d')
+      ctx.lineWidth = 10
+      
+      // const linearGradient = ctx.createLinearGradient(100, 100, 400, 400)
+      // linearGradient.addColorStop(0, '#bfa')
+      // linearGradient.addColorStop(0.5, '#baf')
+      // linearGradient.addColorStop(1, '#fab')
+      // ctx.fillStyle = linearGradient
+      // ctx.fillRect(100, 100, 400, 400)
+
+      // ctx.arc(0, 10, 50, 0, Math.PI, 1)
+      // ctx.stroke()
+      // ctx.fillRect()
+
+      const radialGradient = ctx.createRadialGradient(300, 400, 50, 300, 200, 200)
+      radialGradient.addColorStop(0, '#bfa')
+      radialGradient.addColorStop(0.5, '#baf')
+      radialGradient.addColorStop(1, '#fab')
+      ctx.fillStyle = radialGradient
+      ctx.fillRect(0, 0, 800, 800)
+    </script>
+  </body>
+</html>
