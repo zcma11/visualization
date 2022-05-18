@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #main {
+        width: 600px;
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.js"></script>
+    <div id="main"></div>
+    <script>
+      const chart = echarts.init(document.getElementById('main'))
+      chart.setOption({
+        graphic: {
+          elements: [
+            // {
+            //   type: 'text',
+            //   style: {
+            //     text: 'hello'
+            //   }
+            // }
+            {
+              id: 1,
+              type: 'ring',
+              x: 300,
+              y: 300,
+              shape: {
+                r: 10,
+                r0: 50
+              }
+            }
+          ]
+        }
+      })
+
+      chart.setOption({
+        xAxis: {
+          type: 'value',
+          min: 0,
+          max: 40
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          max: 40
+        }
+      })
+
+      const [x, y] = chart.convertToPixel('grid', [30, 30])
+      chart.setOption({
+        graphic: {
+          elements: [
+            {
+              id: 1,
+              x,
+              y
+            }
+          ]
+        }
+      })
+
+      const axis = chart.convertFromPixel('grid', [150, 150])
+      console.log(axis)
+      chart.setOption({
+        series: {
+          type: 'scatter',
+          data: [axis]
+        },
+        tooltip: {
+          formatter: e => JSON.stringify(axis)
+        }
+      })
+
+      setTimeout(() => {
+        chart.setOption({
+          graphic: {
+            elements: [
+              {
+                id: 1,
+                x: 150,
+                y: 150
+              }
+            ]
+          }
+        })
+      }, 2000)
+    </script>
+  </body>
+</html>

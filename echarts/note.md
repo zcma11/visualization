@@ -127,6 +127,21 @@ dispatchAction({ type })
 3. textBorderColor
 4. textBorderWidth
 
+### graphic
+
+1. elements [{}]
+    - group
+    - image
+    - text
+    - rect
+    - circle
+    - ring
+    - sector
+    - arc
+    - polygon
+    - line
+    - bezierCurve
+
 ### 图表
 
 1. 折线图
@@ -177,3 +192,8 @@ dispatchAction({ type })
    - itemStyle { areaColor, borderColor }
    - emphasis { itemStyle, label }
    - coordinateSystem mapname // 和例如散点图一起使用
+
+### instance
+
+1. convertToPixel
+2. convertFromPixel

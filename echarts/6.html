@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #main {
+        width: 600px;
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.js"></script>
+    <div id="main"></div>
+    <script>
+      const chart = echarts.init(document.getElementById('main'))
+      const symbolSize = 20
+      const source = [
+        [0, 0],
+        [20, 20],
+        [40, 40]
+      ]
+      chart.setOption({
+        xAxis: {
+          type: 'value',
+          min: 0,
+          max: 50
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          max: 50
+        },
+        series: {
+          id: 1,
+          type: 'line',
+          data: source,
+          symbolSize,
+          smooth: true
+        },
+        tooltip: {
+          triggerOn: 'none',
+          formatter: ({ data }) => {
+            const [x, y] = data
+            return `${Math.round(x)},${Math.round(y)}`
+          }
+        }
+      })
+
+      const { curry } = echarts.util
+
+      console.log(curry)
+      chart.setOption({
+        graphic: {
+          elements: source.map((pos, index) => {
+            const [x, y] = chart.convertToPixel('grid', pos)
+            return {
+              x,
+              y,
+              type: 'circle',
+              z: 10,
+              draggable: true,
+              invisible: true,
+              shape: {
+                r: symbolSize / 2
+              },
+              style: {
+                fill: '#000'
+              },
+              ondrag: curry(onPointDrag, index),
+              onmousemove: curry(showTip, index),
+              onmouseover: curry(showTip, index),
+              onmouseout: curry(hideTip, index)
+            }
+          })
+        }
+      })
+
+      function onPointDrag(index) {
+        const { x, y } = this
+        const pos = chart.convertFromPixel('grid', [x, y])
+        source[index] = pos
+        chart.setOption({
+          series: {
+            id: 1,
+            data: source
+          }
+        })
+      }
+
+      function showTip(index) {
+        chart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }
+      function hideTip(index) {
+        chart.dispatchAction({
+          type: 'hideTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }
+    </script>
+  </body>
+</html>
