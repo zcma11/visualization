@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #chart {
+      width: 500px;
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/extension/bmap.js"></script>
+  <script
+      type="text/javascript"
+      src="https://api.map.baidu.com/api?v=3.0&ak=h0nt2hKXIlOc9GfVOrCQSnxd6oIKyoLs"
+    ></script>
+
+    <div id="chart"></div>
+  <script>
+    const c = echarts.init(document.getElementById('chart'))
+    c.setOption({
+      bmap: {
+        center: [116.404, 39.915],
+        zoom: 15,
+        roam: 'scale'
+      }
+    })
+  </script>
+</body>
+</html>

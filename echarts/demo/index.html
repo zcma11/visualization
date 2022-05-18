@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="header">西虹市经济情况可视化</div>
+    <div id="cont">
+      <div class="cont-edge">
+        <div id="chartL1" class="box"></div>
+        <div id="chartL2" class="box"></div>
+        <div id="chartL3" class="box"></div>
+      </div>
+      <div class="cont-center">
+        <div class="center-tit">
+          <div class="center-row">
+            <div class="center-num">12345678</div>
+            <div class="center-num">67890542</div>
+          </div>
+          <div class="center-row">
+            <div class="center-text">2019年收入情况</div>
+            <div class="center-text">2019年总支出情况</div>
+          </div>
+        </div>
+        <div class="center-cont">
+          <!--背景图-->
+          <div class="centerImg">
+            <!--网格点-->
+            <img class="img1" src="./images/lbx.png" alt="" />
+          </div>
+          <div class="centerImg">
+            <!--流光-->
+            <img class="img2" src="./images/jt.png" alt="" />
+          </div>
+          <!--地图容器-->
+          <div id="chartC"></div>
+        </div>
+      </div>
+      <div class="cont-edge">
+        <div id="chartR1" class="box"></div>
+        <div id="chartR2" class="box"></div>
+        <div class="box">
+          <div id="chartR3"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
+    <!-- <script src="https://lib.baomitu.com/echarts/4.7.0/echarts.min.js"></script> -->
+
+    <script src="./js/walden.js"></script>
+
+    <script>
+      var white = 'rgba(255,255,255,0.8)'
+    </script>
+
+    <script>
+      ;(() => {
+        const chart = echarts.init(document.querySelector('#chartL1'), 'walden')
+        chart.setOption({
+          title: {
+            text: '西虹市人民收入增长情况',
+            left: 'center'
+          },
+          xAxis: {
+            type: 'category'
+          },
+          yAxis: {
+            type: 'value'
+          },
+          grid: {
+            bottom: 28
+          }
+        })
+        fetch('./lib/dt-01.json')
+          .then(d => d.json())
+          .then(data => {
+            chart.setOption({
+              series: [
+                {
+                  type: 'line',
+                  seriesLayoutBy: 'row'
+                },
+                {
+                  type: 'line',
+                  seriesLayoutBy: 'row'
+                }
+              ],
+              dataset: {
+                source: data
+              }
+            })
+          })
+          .catch(e => console.log(e))
+      })()
+    </script>
+
+    <script>
+      ;(() => {
+        const source = [
+          { value: 5000, name: '旅游' },
+          { value: 4500, name: '饮食' },
+          { value: 6500, name: '服装' },
+          { value: 3500, name: '电影' },
+          { value: 2500, name: '其它' }
+        ]
+
+        const chart = echarts.init(document.querySelector('#chartL2'), 'walden')
+        chart.setOption({
+          title: {
+            text: '西虹市人民衣食住行支出比',
+            left: 'center'
+          },
+          dataset: { source },
+          series: {
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['50%', '60%'],
+            roseType: 'radius',
+            name: '西虹市人民衣食住行支出比',
+            label: {
+              textBorderColor: 'none',
+              color: white
+            }
+          },
+          tooltip: {
+            formatter: '{d}%'
+          }
+        })
+      })()
+    </script>
+
+    <script>
+      {
+        const chart = echarts.init(document.querySelector('#chartL3'), 'walden')
+        const dimensions = ['收入', '年龄', '人口', '住址', '时间']
+
+        chart.setOption({
+          title: {
+            text: '西虹市人民收入和年龄关系',
+            left: 'center'
+          },
+          xAxis: {
+            type: 'value',
+            name: '年龄',
+            nameTextStyle: {
+              color: white
+            }
+          },
+          yAxis: {
+            type: 'value',
+            name: '收入',
+            nameTextStyle: {
+              color: white
+            }
+          },
+          grid: {
+            bottom: 28
+          },
+          // dataset: {
+          //   dimensions
+          // },
+          series: {
+            type: 'scatter',
+            encode: {
+              x: 1,
+              y: 0
+            },
+            symbolSize: 3,
+            itemStyle: {
+              opacity: 0.3
+            }
+          }
+        })
+
+        fetch('./lib/table.json')
+          .then(d => d.json())
+          .then(data => {
+            chart.setOption({
+              dataset: {
+                dimensions,
+                source: data
+              }
+            })
+          })
+          .catch(e => console.log(e))
+      }
+    </script>
+
+    <script>
+      {
+        const data = [
+          {
+            name: '预算分配',
+            value: [43000, 45000, 42000, 45000, 40000, 49000]
+          },
+          {
+            name: '实际开销',
+            value: [30000, 34000, 55000, 35000, 32000, 31000]
+          }
+        ]
+        const indicator = [
+          { name: '销售', min: 0, max: 60000 },
+          { name: '管理', min: 0, max: 60000 },
+          { name: '信息技术', min: 0, max: 60000 },
+          { name: '客服', min: 0, max: 60000 },
+          { name: '研发', min: 0, max: 60000 },
+          { name: '市场', min: 0, max: 60000 }
+        ]
+        const chart = echarts.init(document.querySelector('#chartR1'), 'walden')
+        chart.setOption({
+          title: {
+            text: '西虹市财务开销'
+          },
+          radar: {
+            indicator
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.3)',
+            borderWidth: 0,
+            textStyle: {
+              color: white
+            }
+          },
+          legend: {
+            orient: 'vertical',
+            data: ['预算分配', '实际开销'],
+            left: 'left',
+            top: 30
+          },
+          series: {
+            type: 'radar',
+            data
+          }
+        })
+      }
+    </script>
+
+    <script>
+      {
+        const source = [
+          ['时间', '小麦', '玉米', '高粱'],
+          [2017, 1000, 800, 900],
+          [2018, 500, 650, 800],
+          [2019, 800, 900, 1200]
+        ]
+        const chart = echarts.init(document.querySelector('#chartR2'), 'walden')
+        chart.setOption({
+          title: {
+            text: '西虹市农作物收成',
+            left: 'center'
+          },
+          tooltip: {},
+          legend: {
+            top: 30,
+            textStyle: {
+              color: white
+            }
+          },
+          grid: {
+            top: 70,
+            bottom: 28
+          },
+          xAxis: {
+            type: 'category'
+          },
+          yAxis: {
+            type: 'value'
+          },
+          dataset: {
+            source
+          },
+          series: [
+            {
+              type: 'bar',
+              id: 'xm'
+            },
+            {
+              type: 'bar',
+              id: 'ym'
+            },
+            {
+              type: 'bar',
+              id: 'gl'
+            }
+          ]
+        })
+
+        const img1 = new Image()
+        img1.src = './images/xm.jpg'
+        const img2 = new Image()
+        img2.src = './images/gl.jpg'
+        const img3 = new Image()
+        img3.src = './images/ym.jpg'
+
+        const toPromise = img => {
+          return new Promise((resolve, reject) => {
+            img.onload = () => resolve(img)
+            // img.onerror = reject
+          })
+        }
+        Promise.all([toPromise(img1), toPromise(img2), toPromise(img3)])
+          .then(img => {
+            chart.setOption({
+              series: ['xm', 'gl', 'ym'].map((id, i) => ({
+                id,
+                color: { image: img[i] }
+              }))
+            })
+          })
+          .catch(e => console.log(e))
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/extension/bmap.js"></script>
+    <script
+      type="text/javascript"
+      src="https://api.map.baidu.com/api?v=3.0&ak=h0nt2hKXIlOc9GfVOrCQSnxd6oIKyoLs"
+    ></script>
+
+    <script>
+      {
+        const chart = echarts.init(document.getElementById('chartR3'), 'walden')
+        chart.setOption({
+          tooltip: {},
+          title: {
+            text: '西虹市的空气质量',
+            left: 'center',
+            top: 12
+          },
+          bmap: {
+            center: [121.48, 31.22],
+            zoom: 6,
+            // roam: 'true',
+            // mapStyle
+            mapStyleV2: {
+              styleId: '21dd8b8313df4c96d9daa8aaee56b7f1'
+            }
+          },
+          series: [
+            {
+              id: 'a',
+              type: 'scatter',
+              coordinateSystem: 'bmap',
+              symbolSize: e => {
+                return e[2] / 15
+              }
+            },
+            {
+              id: 'b',
+              type: 'effectScatter',
+              coordinateSystem: 'bmap',
+              symbolSize: e => {
+                return e[2] / 15
+              }
+            }
+          ]
+        })
+
+        fetch('./lib/pm.json')
+          .then(j => j.json())
+          .then(data => {
+            d = data.splice(data.length - 5, 5)
+            chart.setOption({
+              series: [
+                {
+                  id: 'a',
+                  data
+                },
+                {
+                  id: 'b',
+                  data: d
+                }
+              ]
+            })
+          })
+
+        const m = chart.getModel().getComponent('bmap').getBMap()
+        m.addControl(new BMap.NavigationControl())
+      }
+    </script>
+
+    <script>
+      {
+        const chart = echarts.init(document.getElementById('chartC'), 'walden')
+        chart.setOption({
+          title: {
+            text: '西虹市不同地区的平均收入',
+            textStyle: {
+              fontSize: 24
+            },
+            left: 'center',
+            top: 32
+          },
+          tooltip: {}
+        })
+
+        fetch('./lib/China.json')
+          .then(j => j.json())
+          .then(res => {
+            echarts.registerMap('china', res)
+            chart.setOption({
+              geo: {
+                map: 'china',
+                zoom: 1,
+                roam: true,
+                itemStyle: {
+                  areaColor: 'rgba(0,29,132,0.8)',
+                  borderColor: '#02c0ff'
+                },
+                emphasis: {
+                  itemStyle: {
+                    shadowColor: '#000',
+                    shadowOffsetY: 30,
+                    shadowBlur: 30
+                  }
+                }
+              }
+            })
+          })
+          .then(() => fetch('./lib/income.json').then(j => j.json()))
+          .then(res => {
+            chart.setOption({
+              series: [
+                {
+                  type: 'scatter',
+                  data: res,
+                  coordinateSystem: 'geo',
+                  symbolSize: param => {
+                    return param[2] / 15
+                  },
+                  emphasis: {
+                    itemStyle: {
+                      color: 'yellow'
+                    }
+                  }
+                }
+              ]
+            })
+            dataLen = res.length
+            setInterval(anim, 1000)
+          })
+
+        let curInd = 0
+        let dataLen = null
+
+        function anim() {
+          /*取消之前高亮的图形
+           *   type 触发的行为类型，见action
+           *   seriesIndex 系列索引，用于寻找系列列表中的某个系列
+           *   dataIndex 数据所有，用于寻找系列中的某个元素
+           * */
+          chart.dispatchAction({
+            type: 'downplay',
+            seriesIndex: 0,
+            dataIndex: curInd
+          })
+          /*当前索引递增，不能超过系列元素的总数*/
+          curInd = (curInd + 1) % dataLen
+
+          /*高亮当前图形*/
+          chart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: curInd
+          })
+          /*显示 tooltip*/
+          chart.dispatchAction({
+            type: 'showTip',
+            seriesIndex: 0,
+            dataIndex: curInd
+          })
+        }
+      }
+    </script>
+  </body>
+</html>

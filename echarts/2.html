@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #main,
+      #main1,
+      #main3,
+      #main4,
+      #main5,
+      #main6 {
+        width: 800px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main"></div>
+    <div id="main1"></div>
+    <div id="main3"></div>
+    <div id="main4"></div>
+    <div id="main5"></div>
+    <div id="main6"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
+
+    <script>
+      const chart = echarts.init(document.querySelector('#main'))
+      const option = {
+        xAxis: {
+          data: ['html', 'js', 'css']
+        },
+        yAxis: [
+          {
+            max: 40,
+            min: 0,
+            name: '学习人数',
+            axisLine: {
+              show: true
+            }
+          },
+          {
+            max: 200,
+            min: 0,
+            name: '就业人数',
+            axisLine: {
+              show: true
+            }
+          }
+        ],
+        legend: {},
+        tooltip: {
+          trigger: 'axis'
+        },
+        series: [
+          {
+            name: '学习人数',
+            type: 'bar',
+            data: [30, 20, 40],
+            yAxisIndex: 0
+          },
+          {
+            name: '就业人数',
+            type: 'bar',
+            data: [133, 145, 185],
+            yAxisIndex: 1
+          }
+        ]
+      }
+      chart.setOption(option)
+    </script>
+
+    <script>
+      const chart1 = echarts.init(document.querySelector('#main1'))
+      // const source = [
+      //   ['大前端', '学习人数', '就业人数'],
+      //   ['html', 40, 50],
+      //   ['js', 50, 20],
+      //   ['css', 30, 70]
+      // ]
+      // const source = [
+      //   {
+      //     '大前端': 'html',
+      //     '学习人数': 40,
+      //     '就业人数': 50
+      //   },
+      //   {
+      //     '大前端': 'js',
+      //     '学习人数': 50,
+      //     '就业人数': 20
+      //   },
+      //   {
+      //     '大前端': 'css',
+      //     '学习人数': 30,
+      //     '就业人数': 70
+      //   }
+      // ]
+      // const option1 = {
+      //   xAxis: {
+      //     type: 'category'
+      //   },
+      //   yAxis: {
+      //     type: 'value'
+      //   },
+      //   dataset: {
+      //     source
+      //   },
+      //   series: {
+      //     type:'bar'
+      //   }
+      // }
+      // chart1.setOption(option1)
+      const dimensions = ['大前端', '学习人数', '就业人数']
+      const source = [
+        ['html', 40, 50],
+        ['js', 50, 20],
+        ['css', 30, 70]
+      ]
+      const option2 = {
+        tooltip: {},
+        xAxis: {
+          type: 'category'
+        },
+        yAxis: {
+          // type: 'value'
+        },
+        dataset: {
+          source,
+          dimensions
+          // seriesLayoutBy: 'row'
+        },
+        // series: [
+        //   {
+        //     type: 'bar'
+        //   },
+        //   {
+        //     type: 'bar'
+        //   },
+        // ]
+        series: {
+          type: 'bar',
+          encode: {
+            x: 0,
+            y: 2,
+            seriesName: 2,
+            tooltip: [2]
+          }
+        }
+      }
+      chart1.setOption(option2)
+    </script>
+
+    <script>
+      const chart3 = echarts.init(document.querySelector('#main3'))
+      const source3 = [
+        [2, 1, 5],
+        [4, 2, 10],
+        [6, 3, 15],
+        [8, 4, 20],
+        [10, 5, 25],
+        [12, 6, 30],
+        [14, 7, 35],
+        [16, 8, 40],
+        [18, 9, 45]
+      ]
+      const option3 = {
+        tooltip: {},
+        toolbox: {
+          feature: {
+            dataZoom: {}
+          }
+        },
+        dataZoom: [
+          // {
+          //   type: 'slider',
+          //   start: 0,
+          //   end: 100
+          // },
+          {
+            type: 'slider'
+          },
+          {
+            type: 'slider',
+            yAxisIndex: 0
+          }
+        ],
+        xAxis: {
+          type: 'value',
+          min: 0,
+          // min: 'dataMin',
+          max: 20
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          max: 10
+        },
+        dataset: { source: source3 },
+        series: {
+          type: 'scatter',
+          symbolSize: data => data[2]
+        }
+      }
+
+      chart3.setOption(option3)
+    </script>
+
+    <script>
+      const chart4 = echarts.init(document.querySelector('#main4'))
+      const source4 = [
+        [2, 1, 10],
+        [4, 2, 20],
+        [6, 3, 30],
+        [8, 4, 40],
+        [10, 5, 50],
+        [12, 6, 60],
+        [14, 7, 70],
+        [16, 8, 80],
+        [18, 9, 90]
+      ]
+      const option4 = {
+        xAxis: {
+          type: 'value'
+          // min: 0,
+          // min: 'dataMin',
+          // max: 20
+        },
+        yAxis: {
+          type: 'value'
+          // min: 0,
+          // max: 10
+        },
+        visualMap: {
+          // type: 'continuous',
+          type: 'piecewise',
+          calculable: true,
+          // range: [30, 50],
+          min: 0,
+          max: 100,
+          inRange: {
+            symbolSize: [0, 50],
+            color: ['orange', 'yellow', 'lightgreen']
+          }
+        },
+        dataset: { source: source4 },
+        series: {
+          type: 'scatter'
+          // symbolSize: data => data[2]
+        }
+      }
+
+      chart4.setOption(option4)
+    </script>
+
+    <script>
+      const chart5 = echarts.init(document.querySelector('#main5'))
+      const dimensions5 = ['大前端', '学习人数']
+      const source5 = [
+        ['html', 40],
+        ['js', 50],
+        ['css', 30]
+      ]
+
+      const option5 = {
+        tooltip: {},
+        legend: {},
+        dataset: { source: source5, dimensions: dimensions5 },
+        series: {
+          type: 'pie',
+          emphasis: {
+            itemStyle: {
+              shadowColor: 'rgba(0,0,0,0.5)',
+              shadowOffset: 10,
+              shadowBlur: 10
+            }
+          }
+        }
+      }
+      chart5.setOption(option5)
+      let i5 = 0
+      const len5 = source5.length
+      setInterval(() => {
+        chart5.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: i5
+        })
+        chart5.dispatchAction({
+          type: 'hideTip',
+          seriesIndex: 0,
+          dataIndex: i5
+        })
+
+        i5++
+        if (i5 === len5) {
+          i5 = 0
+        }
+
+        chart5.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: i5
+        })
+        chart5.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: i5
+        })
+      }, 1500)
+    </script>
+
+    <script>
+      const chart6 = echarts.init(document.querySelector('#main6'))
+      const data6 = [
+        { name: 'akdslm', value: 80, img: './images/lb.jpg', color: '#5470c6' },
+        { name: 'vrere', value: 50, img: './images/zgl.jpg', color: '#91cc75' },
+        { name: 'zxvf', value: 20, img: './images/yj.jpg', color: '#fac858' },
+        { name: 'nytw', value: 60, img: './images/smx.jpg', color: '#ee6666' }
+      ]
+      data6.forEach(op => {
+        op.label = {
+          color: op.color,
+          textBorderColor: '#fff',
+          textBorderWidth: 3,
+          formatter: `{img|}\n{name|${op.name}}\n{val|战力: ${op.value}}`,
+          rich: {
+            img: {
+              width: 60,
+              height: 60,
+              backgroundColor: {
+                image: op.img
+              },
+              borderColor: '#fff',
+              borderWidth: 5
+            },
+            name: {
+              fontSize: 20,
+              lineHeight: 32,
+              fontWeight: 'bold'
+            },
+            val: {
+              fontSize: 18,
+              lineHeight: 20
+            }
+          }
+        }
+      })
+      const option6 = {
+        series: {
+          type: 'pie',
+          data: data6
+        }
+      }
+      chart6.setOption(option6)
+    </script>
+  </body>
+</html>

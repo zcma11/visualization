@@ -23,6 +23,10 @@ setOption({})
 4. borderWidth
 5. textStyle
 
+### toolbox
+
+1. feature { dataZoom, saveAsImage, dataView, restore, magicType }
+
 ### legend
 
 1. left
@@ -39,6 +43,9 @@ setOption({})
 4. axisLabel {margin, rotate}
 5. axisTick
 6. axisLine
+7. type category
+8. min
+9. max
 
 ### yAxis
 
@@ -49,6 +56,9 @@ setOption({})
 5. maxInterval
 6. data
 7. axisLabel
+8. type value
+9. min
+10. max
 
 ### series
 
@@ -60,12 +70,15 @@ setOption({})
 3. type
 4. markPoint data { type } { coord: [x,y], value}
 5. markLine data { type } [ {coord}, {coord} ]
+6. encode { x, y, tooltip:[] } axis 下标
 
 ### visualMap
 
 1. min
 2. max
-3. inRange { color:[], colorLightness: [0,1] }
+3. inRange { color:[], colorLightness: [0,1], symbolSize }
+4. range
+5. caculable
 
 ### radar
 
@@ -83,6 +96,37 @@ setOption({})
 4. itemStyle
 5. emphasis
 
+### dataset
+
+1. source
+2. dimensions
+3. seriesLayoutBy
+
+### dataZoom
+
+[]
+
+1. type inside slider
+2. yAxisIndex
+
+### event
+
+### action
+
+dispatchAction({ type })
+
+1. showTip
+2. hideTip
+3. highlight
+4. downplay
+
+### data label
+
+1. fromatter {rule|data}
+2. rich { xxx: { backgroundColor: { image }, ...style } }
+3. textBorderColor
+4. textBorderWidth
+
 ### 图表
 
 1. 折线图
@@ -90,7 +134,7 @@ setOption({})
    - smooth
    - itemStyle
    - areaStyle
-   - symbol  image:// path:// 
+   - symbol image:// path://
    - symbolSize
 
 2. 饼图
