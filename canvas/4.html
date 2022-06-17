@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const width = 800
+      const height = 800
+      const a = document.createElement('canvas')
+      a.width = width
+      a.height = height
+
+      document.body.appendChild(a)
+
+      const ctx = a.getContext('2d')
+      const textArg = ['canvas', a.width / 2, a.height / 2]
+      ctx.font = 'bold 200px arial'
+      ctx.textAlign = 'center'
+      ctx.shadowBlur = 4
+      ctx.shadowOffsetY = 2
+      ctx.shadowColor = 'rgba(0,0,0,0.6)'
+      fill()
+      border()
+      lineDash()
+
+      function fill() {
+        ctx.save()
+        ctx.fillStyle = '#a76921'
+        ctx.fillText(...textArg)
+        ctx.restore()
+      }
+
+      function border() {
+        ctx.save()
+        ctx.strokeStyle = '#f0d5ac'
+        ctx.lineWidth = 8
+        ctx.strokeText(...textArg)
+        ctx.stroke()
+      }
+
+      function lineDash() {
+        ctx.save()
+        ctx.lineWidth = 1
+        ctx.strokeStyle = '#333'
+        ctx.setLineDash([5, 3])
+        ctx.strokeText(...textArg)
+        ctx.restore()
+      }
+    </script>
+  </body>
+</html>

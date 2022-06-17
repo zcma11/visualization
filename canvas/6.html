@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const width = window.innerWidth
+      const height = window.innerHeight
+
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      document.body.appendChild(canvas)
+
+      const ctx = canvas.getContext('2d')
+
+      const [redA, redB, yellow] = ['#db655c', '#d63d46', '#9f8d7d']
+      const c = Math.PI * 2
+
+      ;(() => {
+        const auto = () => {
+          ctx.clearRect(0, 0, width, height)
+          clock()
+          requestAnimationFrame(auto)
+        }
+        auto()
+      })()
+
+      function clock() {
+        ctx.save()
+        ctx.translate(width / 2, height / 2)
+        ctx.rotate(-c / 4)
+
+        circle(145, redA, 20)
+        circle(155, redB, 9)
+
+        calibration(4, () => false, {
+          lineWidth: 15,
+          color: redB,
+          from: [90, 0],
+          to: [120, 0],
+          rotate: c / 4
+        })
+
+        calibration(12, i => i % 3 == 0, {
+          lineWidth: 6,
+          color: yellow,
+          from: [90, 0],
+          to: [120, 0],
+          rotate: c / 12
+        })
+
+        calibration(60, i => i % 5 == 0, {
+          lineWidth: 3,
+          color: yellow,
+          from: [118, 0],
+          to: [120, 0],
+          rotate: c / 60
+        })
+
+        const t = getTime()
+        const [h, m, s] = angle(...t)
+
+        line({
+          lineWidth: 9,
+          color: yellow,
+          from: [-20, 0],
+          to: [65, 0],
+          rotate: h
+        })
+
+        line({
+          lineWidth: 4,
+          color: yellow,
+          from: [-28, 0],
+          to: [80, 0],
+          rotate: m
+        })
+
+        line({
+          lineWidth: 2,
+          color: redB,
+          from: [-30, 0],
+          to: [88, 0],
+          rotate: s
+        })
+
+        ctx.restore()
+      }
+
+      function circle(r, color, lineWidth) {
+        ctx.save()
+        ctx.beginPath()
+        ctx.strokeStyle = color
+        ctx.lineWidth = lineWidth
+        ctx.arc(0, 0, r, 0, c)
+        ctx.stroke()
+        ctx.restore()
+      }
+
+      function calibration(count, pass, config = {}) {
+        ctx.save()
+        ctx.beginPath()
+        const {
+          lineWidth = 1,
+          color = '#000',
+          from = [0, 0],
+          to = [0, 0],
+          rotate = 0
+        } = config
+        ctx.lineWidth = lineWidth
+        ctx.strokeStyle = color
+
+        for (let i = 0; i < count; i++) {
+          if (!pass(i)) {
+            ctx.moveTo(...from)
+            ctx.lineTo(...to)
+            ctx.stroke()
+          }
+          ctx.rotate(rotate)
+        }
+        ctx.restore()
+      }
+
+      function line(config = {}) {
+        const {
+          lineWidth = 1,
+          color = '#000',
+          from = [0, 0],
+          to = [0, 0],
+          rotate = 0
+        } = config
+
+        ctx.save()
+        ctx.beginPath()
+        ctx.lineWidth = lineWidth
+        ctx.strokeStyle = color
+        ctx.rotate(rotate)
+        ctx.moveTo(...from)
+        ctx.lineTo(...to)
+        ctx.stroke()
+        ctx.restore()
+      }
+
+      function getTime() {
+        const date = new Date()
+        const h = date.getHours()
+        const m = date.getMinutes()
+        const s = date.getSeconds()
+
+        return [h, m, s]
+      }
+
+      function angle(h, m, s) {
+        h = (h / 12) * c
+        m = (m / 60) * c
+        s = (s / 60) * c
+
+        return [h + m / 60 + s / 60 / 60, m + s / 60, s]
+      }
+    </script>
+  </body>
+</html>

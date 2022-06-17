@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const width = window.innerWidth
+      const height = window.innerHeight
+      const a = document.createElement('canvas')
+      a.width = width
+      a.height = height
+      document.body.appendChild(a)
+
+      const ctx = a.getContext('2d')
+      // ctx.drawImage(video | img, viewpointx, viewpointy, viewpointw, viewpointh, clipx, clipy, clipw, cliph)
+      // ctx.getImageData()
+      // ctx.putImageData(data, ctxx,ctxy, datax,datay,width,height)
+
+      // new ImageData(w, h)
+      // Uint8ClampedArray [r,g,b,a,r,g,b,a] width height
+
+      // 灰度
+      // const image = new Image()
+      // image.src = './images/river.jpg'
+      // // document.body.appendChild(image)
+      // image.onload = () => {
+      //   const { width, height } = image
+      //   ctx.drawImage(image, 0, 0)
+      //   const unit8 = ctx.getImageData(0,0,width, height)
+      //   const d = unit8.data
+      //   for(let i = 0; i < d.length; i+=4) {
+      //     const r = d[i + 0]
+      //     const g = d[i + 1]
+      //     const b = d[i + 2]
+
+      //     const lm = r * 0.299 + g * 0.587 + b * 0.114
+      //     d[i + 0] = lm
+      //     d[i + 1] = lm
+      //     d[i + 2] = lm
+      //   }
+
+      //   ctx.putImageData(unit8, 0, height)
+      // }
+
+      // 马赛克
+      const image = new Image()
+      image.src = './images/wns.jpg'
+      const size = 8
+      // document.body.appendChild(image)
+      image.onload = () => {
+        const { width, height } = image
+        ctx.drawImage(image, 0, 0)
+        const unit8 = ctx.getImageData(0, 0, width, height)
+        const d = unit8.data
+        for (let y = 0; y < height; y += size) {
+          for (let x = 0; x < width; x += size) {
+            const ind = (y * width + x) * 4 // 
+            const [r, g, b] = [d[ind], d[ind + 1], d[ind + 2]]
+            ctx.fillStyle = '#000'
+            ctx.fillRect(x,y,size,size)
+            ctx.fillStyle = `rgb(${r},${g},${b})`
+            // ctx.fillRect(x,y,size, size)
+            ctx.beginPath()
+            ctx.arc(x, y, size / 2, 0, Math.PI * 2)
+            ctx.fill()
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
